@@ -44,12 +44,23 @@ export class UsersResolver {
   public async updateUserInfo(@Args('email') email: string,
     @Args('updateData') updateData: UpdateUserInput,
   ): Promise<User> {
-    return await this.userService.updateUserInfo(email,updateData).catch((err) => {
+    return await this.userService.updateUserInfo(email, updateData).catch((err) => {
       throw err;
     });
   }
 
+  @Mutation((returns) => Boolean)
+  public async deleteByEmail(@Args('email') email: string,) {
+    return await this.userService.deleteUser(email).catch((err) => {
+      throw err;
+    });
+  }
 
-
+    @Mutation((returns) => Boolean)
+    public async deleteAllUsers() {
+      return await this.userService.deleteAllUsers().catch((err) => {
+        throw err;
+      });
+    }
 
 }

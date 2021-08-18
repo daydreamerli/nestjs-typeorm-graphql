@@ -24,7 +24,6 @@ export class UsersService {
     
   }
 
-  
   public async addUser(newUserData: NewUserInput): Promise<User> {
 
     const newUser = this.userRepository.create(newUserData);
@@ -50,9 +49,22 @@ export class UsersService {
     return updatedUser;
   }
 
-  public async deleteUser(email:string):Promise<Boolean>{
+  public async deleteUser(email: string){
     
-    await this.userRepository.delete({ email });
+    await this.userRepository.delete({ email }).catch((err) => {
+      throw new InternalServerErrorException()
+    });
+  
+      return true;
+    
+    
+  }
+
+  public async deleteAllUsers(){
+    
+    await this.userRepository.delete({}).catch((err) => {
+      throw new InternalServerErrorException();
+    });
     
     return true;
     

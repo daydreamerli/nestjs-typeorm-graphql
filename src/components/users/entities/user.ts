@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IsEmail, Length, minLength } from 'class-validator';
 import { type } from 'os';
 import { Order } from 'src/components/orders/entities/order';
 import { Column, Entity, PrimaryGeneratedColumn ,OneToMany} from 'typeorm';
@@ -18,17 +19,19 @@ export class User {
 
   @Column({ length: 128,nullable: false })
   @Field()
+  @IsEmail()
   email: string;
 
   @Column({ length: 512, nullable: false })
   @Field()
+  @Length(6,512)
   password: string;
 
   @Field((type) => [Order],{nullable:true})
-  @OneToMany(() => Order,order => order.createBy,{onDelete: 'NO ACTION'})
+  @OneToMany(() => Order,order => order.user,{onDelete: 'NO ACTION'})
   orders: Order[]
   
-  @Column()
+  @Column({nullable:true})
   @Field()
   country: string;
 
@@ -36,7 +39,5 @@ export class User {
   @Field()
   thumbnailUrl: string;
   
-  
-
   
 }
