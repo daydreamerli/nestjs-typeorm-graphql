@@ -17,4 +17,9 @@ export class UpdateCarInput {
   @Field()
   mileage: string;
 
+  @Field((type) => Int)
+  @Max(100, { message: "we are not No#1 in NZ" })
+  @Min(2)
+  quantity: number;
+
 }

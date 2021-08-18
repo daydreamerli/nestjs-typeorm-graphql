@@ -2,22 +2,22 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
 import { User } from '../../users/entities/user';
 import { Car } from '../../cars/entities/car';
-import { RelationId } from 'typeorm';
+import { JoinColumn, RelationId } from 'typeorm';
 import { CarsModule } from '../../cars/cars.module';
+import { userInfo } from 'os';
 
 
 @InputType()
 export class NewOrderInput {
 
-  
-  @Field()
-  username: String;
 
-  
+  @Field()
+  userId: String;
+
   @Field()
   @Min(20)  
   amount: number;
-
+  
   
   @Field()
   @Min(1)
@@ -27,5 +27,8 @@ export class NewOrderInput {
   
   @Field()
   orderedCars: String;
+
+  // @Field()
+  // orderDate:Date
 
 }

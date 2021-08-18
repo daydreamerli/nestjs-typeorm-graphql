@@ -70,7 +70,8 @@ export class CarsService {
       {
         dailyPrice: updateCarData.dailyPrice,
         monthlyPrice: updateCarData.monthlyPrice,
-        mileage:updateCarData.mileage
+        mileage: updateCarData.mileage,
+        quantity:updateCarData.quantity
       });
     
     const updatedCar = await this.carRepository.findOne({ name });

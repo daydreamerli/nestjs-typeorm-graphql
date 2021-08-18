@@ -16,4 +16,7 @@ export class UpdateOrderInput {
   @Field()
   orderedCars: String;
 
+  @Field(() => Date)
+  updateOrderDate:String
+
 }
