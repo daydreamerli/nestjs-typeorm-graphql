@@ -1,11 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { table } from 'console';
 import { type } from 'os';
-import { Column, Entity, PrimaryGeneratedColumn,ManyToOne,RelationId} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,ManyToOne,RelationId, JoinColumn} from 'typeorm';
 import { UsersModule } from '../../users/users.module';
 import { CarsModule } from 'src/components/cars/cars.module';
 import { User } from '../../users/entities/user';
 import {Car} from'../../cars/entities/car'
+import { IsDate} from 'class-validator';
 
 @Entity({ name: 'orders' })
 @ObjectType()
@@ -16,11 +17,12 @@ export class Order {
   @Field()
   id: string;
   
-  @ManyToOne(()=>User,user =>user.orders,{onDelete: 'NO ACTION'})
-  createBy: User;
+  @ManyToOne(() => User, user => user.orders, { onDelete: 'NO ACTION' })
+  user: User;
+ 
 
-  @RelationId((order:Order) =>order.createBy)
-  createByName: String
+  @JoinColumn()
+  userId:String
 
   @Column()
   @Field()
@@ -30,13 +32,19 @@ export class Order {
   @Field()
   amount: number;
 
+  // @Column()
+  // @Field()
+  // @IsDate()
+  // endDate:Date
+
+
+  // @Column()
+  // @Field()
+  // @IsDate()
+  // orderDate: Date
+  
   @Column()
   @Field()
   duration: number;
 
-
-  
-
-
-  
 }

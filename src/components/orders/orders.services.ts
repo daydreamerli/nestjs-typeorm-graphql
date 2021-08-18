@@ -20,7 +20,13 @@ export class OrdersService {
     });
   }
 
-
+  public async deleteAllOrders(): Promise<Boolean> {
+    
+     await this.orderRepository.delete({}).catch((err) => {
+       throw new InternalServerErrorException();
+     });
+     return true;
+  }
 
   public async addOrder(NewOrderData: NewOrderInput): Promise<Order> {
 
@@ -32,6 +38,8 @@ export class OrdersService {
 
     return newOrder;
   }
+
+
 
 
 }

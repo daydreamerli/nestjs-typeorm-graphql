@@ -17,7 +17,6 @@ export class OrdersResolver {
   }
 
 
-
   @Mutation((returns) => Order)
   public async addNewOrder(
     @Args('newOrderData') newOrderData: NewOrderInput,
@@ -27,6 +26,12 @@ export class OrdersResolver {
     });
   }
 
+  @Mutation(() => Boolean)
+  public async deleteAllOrders(){
+     await this.orderService.deleteAllOrders().catch((err) => {
+      throw err;
+    });
+  }
   
 
 
