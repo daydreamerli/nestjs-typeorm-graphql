@@ -1,0 +1,113 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Car {
+  carId: String!
+  category: String!
+  dailyPrice: Float!
+  driveTrain: String!
+  gas: String!
+  gearType: String!
+  mileage: String!
+  monthlyPrice: Float!
+  name: String!
+  quantity: Float!
+  thumbnailUrl: String!
+  year: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  addNewCar(newCarData: NewCarInput!): Car!
+  addNewOrder(newOrderData: NewOrderInput!): Order!
+  addNewUser(newUserData: NewUserInput!): User!
+  deleteAllOrders: Boolean!
+  deleteAllUsers: Boolean!
+  deleteByEmail(email: String!): Boolean!
+  deleteOne(carId: String!): Boolean!
+  deleteUser(email: String!): Boolean!
+  updateCar(name: String!, updateData: UpdateCarInput!): Car!
+  updateQuantity(name: String!, orderQuantity: OrderQuantityInput!): Car!
+  updateUserInfo(email: String!, updateData: UpdateUserInput!): User!
+}
+
+input NewCarInput {
+  category: String!
+  dailyPrice: Int!
+  driveTrain: String!
+  gas: String!
+  gearType: String!
+  mileage: String!
+  monthlyPrice: Int!
+  name: String!
+  quantity: Int!
+  thumbnailUrl: String!
+  year: String!
+}
+
+input NewOrderInput {
+  amount: Float!
+  duration: Float!
+  orderCars: String!
+  userId: String!
+}
+
+input NewUserInput {
+  country: String!
+  email: String!
+  password: String!
+  thumbnailUrl: String
+  username: String!
+}
+
+type Order {
+  amount: Float!
+  cars: [Car!]
+  duration: Float!
+  endDate: DateTime!
+  orderId: String!
+  startDate: DateTime!
+}
+
+input OrderQuantityInput {
+  orderNumber: Int!
+}
+
+type Query {
+  CheckAvailable(name: String!): String!
+  findByCategory(category: String!): [Car!]!
+  findByDrivetrain(driveTrain: String!): [Car!]!
+  findByName(name: String!): Car!
+  finduserByEmail(email: String!): User!
+  getAllCars: [Car!]!
+  getAllOrders: [Order!]!
+  getAllUsers: [User!]!
+}
+
+input UpdateCarInput {
+  dailyPrice: Int!
+  mileage: String!
+  monthlyPrice: Int!
+  quantity: Int!
+}
+
+input UpdateUserInput {
+  password: String!
+  thumbnailUrl: String
+  username: String!
+}
+
+type User {
+  country: String!
+  email: String!
+  orders: [Order!]
+  password: String!
+  thumbnailUrl: String!
+  userId: String!
+  username: String!
+}
