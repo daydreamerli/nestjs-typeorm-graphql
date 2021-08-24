@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { truncate } from 'fs';
-import { Repository,createConnection } from 'typeorm';
+import { Repository,createConnection,Connection } from 'typeorm';
 import { NewUserInput } from './dto/new-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user';
@@ -19,9 +19,9 @@ export class UsersService {
     });
   }
 
-  public async findByUsername(username:string) :Promise<User>{
+  public async findByUsername(email:string) :Promise<User>{
     
-    return await this.userRepository.findOne({ username},{relations:['Order']});
+    return await this.userRepository.findOne({ email},{relations:['orders']});
     
   }
 
