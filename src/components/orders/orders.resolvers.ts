@@ -16,6 +16,12 @@ export class OrdersResolver {
     });
   }
 
+  @Query((returns) => [Order])
+  public async getUserOrders(@Args('userId') userId:string): Promise<Order[]> {
+    return await this.orderService.getUserOrders(userId).catch((err) => {
+      throw err;
+    });
+  }
 
   @Mutation((returns) => Order)
   public async addNewOrder(

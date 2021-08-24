@@ -10,16 +10,15 @@ import { userInfo } from 'os';
 @InputType()
 export class NewOrderInput {
 
-
   @Field()
-  userId: String;
+   userId:string
 
-  @Field()
+  @Field(type=>Int)
   @Min(20)  
   amount: number;
   
   
-  @Field()
+  @Field(type=>Int)
   @Min(1)
   @Max(120)
   duration: number;
@@ -27,6 +26,7 @@ export class NewOrderInput {
   
   @Field()
   orderedCars: String;
+ 
 
   // @Field()
   // orderDate:Date

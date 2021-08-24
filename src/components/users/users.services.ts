@@ -1,10 +1,11 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { truncate } from 'fs';
-import { Repository } from 'typeorm';
+import { Repository,createConnection } from 'typeorm';
 import { NewUserInput } from './dto/new-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user';
+import {Order} from '../orders/entities/order'
 import { Int } from '@nestjs/graphql';
 
 @Injectable()
@@ -13,14 +14,14 @@ export class UsersService {
 
   public async getAllUsers(): Promise<User[]> {
     
-    return await this.userRepository.find({}).catch((err) => {
+    return await this.userRepository.find().catch((err) => {
       throw new InternalServerErrorException();
     });
   }
 
   public async findByUsername(username:string) :Promise<User>{
     
-    return await this.userRepository.findOne({ username });
+    return await this.userRepository.findOne({ username},{relations:['Order']});
     
   }
 

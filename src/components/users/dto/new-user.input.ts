@@ -23,7 +23,7 @@ export class NewUserInput {
   @Field()
   country: string;
 
-  @Field()
+  @Field({nullable:true})
   thumbnailUrl: string;
 
 }

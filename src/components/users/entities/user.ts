@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { IsEmail, Length, minLength } from 'class-validator';
 import { type } from 'os';
 import { Order } from 'src/components/orders/entities/order';
-import { Column, Entity, PrimaryGeneratedColumn ,OneToMany} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn ,OneToMany, JoinColumn} from 'typeorm';
 
 @Entity({ name: 'users' })
 @ObjectType()
@@ -27,9 +27,17 @@ export class User {
   @Length(6,512)
   password: string;
 
-  @Field((type) => [Order],{nullable:true})
-  @OneToMany(() => Order,order => order.user,{onDelete: 'NO ACTION'})
+  
+  @OneToMany(() => Order, order => order.user, { onDelete:'SET NULL' })
+  @JoinColumn()
   orders: Order[]
+
+  addOrder(order: Order) {
+    if (this.orders == null) {
+      this.orders = new Array<Order>();
+    }
+    this.orders.push(order)
+  }
   
   @Column({nullable:true})
   @Field()
