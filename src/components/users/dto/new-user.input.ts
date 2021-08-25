@@ -20,7 +20,7 @@ export class NewUserInput {
   password: string;
   
   
-  @Field()
+  @Field({nullable:true})
   country: string;
 
   @Field({nullable:true})

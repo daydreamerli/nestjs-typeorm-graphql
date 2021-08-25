@@ -18,10 +18,11 @@ export class Order {
   id: string;
   
   @Column()
-  userId: string
+  ownerId: string
   
   @ManyToOne(() => User, user => user.orders, { onDelete: 'NO ACTION' })
-  user: User;
+  owner: User;
+
 
   @ManyToMany(() => Car, cars => cars.orders)
   cars:Car[]

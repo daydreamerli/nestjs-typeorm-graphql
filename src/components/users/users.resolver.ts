@@ -18,6 +18,13 @@ export class UsersResolver {
   }
 
   @Query((returns) => User)
+  public async finduserById(@Args('id') id: string): Promise<User> {
+    return await this.userService.getUserById(id).catch((err) => {
+      throw err;
+    });
+  }
+
+  @Query((returns) => User)
   public async finduserByEmail(@Args('email') email: string): Promise<User> {
     return await this.userService.findByUsername(email).catch((err) => {
       throw err;

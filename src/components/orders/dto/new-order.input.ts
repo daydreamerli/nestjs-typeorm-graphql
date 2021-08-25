@@ -11,7 +11,7 @@ import { userInfo } from 'os';
 export class NewOrderInput {
 
   @Field()
-   userId:string
+  ownerId: string
 
   @Field(type=>Int)
   @Min(20)  

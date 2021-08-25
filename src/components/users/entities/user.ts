@@ -28,9 +28,10 @@ export class User {
   password: string;
 
   
-  @OneToMany(() => Order, order => order.user, { onDelete:'SET NULL' })
+  @OneToMany(() => Order, order => order.owner, { onDelete:'SET NULL' })
   @JoinColumn()
   orders: Order[]
+  
 
   addOrder(order: Order) {
     if (this.orders == null) {

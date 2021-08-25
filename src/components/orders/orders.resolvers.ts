@@ -17,8 +17,8 @@ export class OrdersResolver {
   }
 
   @Query((returns) => [Order])
-  public async getUserOrders(@Args('userId') userId:string): Promise<Order[]> {
-    return await this.orderService.getUserOrders(userId).catch((err) => {
+  public async getUserOrders(@Args('ownerId') ownerId:string): Promise<Order[]> {
+    return await this.orderService.getUserOrders(ownerId).catch((err) => {
       throw err;
     });
   }
