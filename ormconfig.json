@@ -23,7 +23,7 @@
     "password": "nestjs2021",
     "database": "greatcars",
     "entities": ["dist/**/entities/*{.ts,.js}"],
-    "synchronize": true,
+    "synchronize": false, 
     "migrations": ["dist/migrations/*{.ts,.js}"],
     "cli": {
       "migrationsDir": "src/migrations"

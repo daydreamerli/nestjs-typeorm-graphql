@@ -22,7 +22,7 @@ export class UsersService {
 
   public async getUserById(id: string): Promise<User> {
 
-    return await this.userRepository.findOneOrFail(id,{relations:['orders'],where:{orders:{ownerId:id}}}).catch((err) => {
+    return await this.userRepository.findOneOrFail(id,{relations:['orders']}).catch((err) => {
       throw new InternalServerErrorException();
     });
   }

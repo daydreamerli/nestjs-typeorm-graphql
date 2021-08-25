@@ -25,7 +25,6 @@ export class OrdersService {
 
   public async getUserOrders(ownerId:string): Promise<Order[]> {
    
-    
     return await this.orderRepository.find({relations:['owner'],where:{owner:{id:ownerId}}}).catch((err) => {
       // the problem here is the ['own'] is only defined the relation the orders with a 'owner' -> every order
       // createQueryBuilder().relation('owner').of(orders)
@@ -46,15 +45,14 @@ export class OrdersService {
     const newOrder = this.orderRepository.create(NewOrderData);
 
     let userid = NewOrderData.ownerId;
-    // async Connection => {
-    //   console.log("connect to db to save the new order to user")
-    //   const userRepository = Connection.getRepository(User)
-    //   const orderUser = await userRepository.findOne(userid)
-    //   console.log(`The order is placed by user :${orderUser.username}`)
-    //   newOrder.owner = orderUser
-    // }
-    // newOrder.owner = await this.userService.getUserById(userid);
-
+    async Connection => {
+      console.log("connect to db to save the new order to user")
+      const userRepository = Connection.getRepository(User)
+      const orderUser = await userRepository.findOne(userid)
+      console.log(`The order is placed by user :${orderUser.username}`)
+      newOrder.owner = orderUser
+    }
+    
     await this.orderRepository.save(newOrder).catch((err) => {
       new InternalServerErrorException();
     });
