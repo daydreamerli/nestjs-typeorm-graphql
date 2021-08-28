@@ -38,7 +38,5 @@ export class OrdersResolver {
       throw err;
     });
   }
-  
-
 
 }

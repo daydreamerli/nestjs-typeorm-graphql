@@ -55,6 +55,15 @@ export class Car {
   thumbnailUrl: string;
 
   @ManyToMany(() => Order, orders => orders.cars)
-  @JoinTable()
+  @JoinTable() 
   orders: Order[];
+  // lazy mode : Promise<Order[]>
+  
+  addOrder(order: Order) {
+    if (this.orders == null) {
+      this.orders = new Array<Order>();
+    }
+    this.orders.push(order)
+  }
+
 }

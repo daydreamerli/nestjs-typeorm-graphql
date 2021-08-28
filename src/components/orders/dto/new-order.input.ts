@@ -17,18 +17,25 @@ export class NewOrderInput {
   @Min(20)  
   amount: number;
   
+  @Field()
+  startDate: string;
+
+  @Field()
+  endDate: string;
+  
   
   @Field(type=>Int)
   @Min(1)
   @Max(120)
   duration: number;
   
-  
-  @Field()
-  orderedCars: String;
- 
-
   // @Field()
   // orderDate:Date
+  
+  @Field()
+  orderedCars: string;
+ 
+
+  
 
 }

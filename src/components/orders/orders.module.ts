@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdersResolver } from './orders.resolvers';
 import { OrdersService } from './orders.services';
 import { Order } from './entities/order';
+import {CarsModule } from'../cars/cars.module'
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order])],

@@ -28,7 +28,7 @@ export class User {
   password: string;
 
   
-  @OneToMany(() => Order, order => order.owner, { onDelete:'SET NULL' })
+  @OneToMany(() => Order, order => order.owner, { cascade: true })
   @JoinColumn()
   orders: Order[]
   

@@ -18,11 +18,19 @@ export class CarsResolver {
   }
 
   @Query((returns) => [Car])
+  public async findOrderCars(@Args('id') id: string): Promise<Car[]> {
+    return await this.carsService.findOrderCars(id).catch((err) => {
+      throw err;
+    });
+  }
+
+  @Query((returns) => [Car])
   public async findByCategory(@Args('category') category: string): Promise<Car[]> {
     return await this.carsService.findByCategory(category).catch((err) => {
       throw err;
     });
   }
+  
 
   @Query((returns) => [Car])
   public async findByDrivetrain(@Args('driveTrain') driveTrain: string): Promise<Car[]> {

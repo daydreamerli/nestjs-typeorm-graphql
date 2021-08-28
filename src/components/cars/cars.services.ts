@@ -21,9 +21,18 @@ export class CarsService {
 
   public async findByCategory(category:string) :Promise<Car[]>{
     
-    return await this.carRepository.find({category:category });
-    
+    return await this.carRepository.find({category:category }).catch((err) => {
+      throw new InternalServerErrorException();
+    });
   }
+  
+  public async findOrderCars(id: string): Promise<Car[]>{
+    
+    return await this.carRepository.find({relations:['orders'],where:{orders:{ordersId:id}}}).catch((err) => {
+      throw new InternalServerErrorException();
+    });
+  }
+
 
   public async findByDrivetrain(driveTrain:string) :Promise<Car[]>{
     

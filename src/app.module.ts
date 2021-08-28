@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ComponentsModule } from './components/components.module';
+import { Connection } from 'typeorm';
 
 @Module({
   imports: [
@@ -20,4 +21,6 @@ import { ComponentsModule } from './components/components.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection: Connection) { }
+}
