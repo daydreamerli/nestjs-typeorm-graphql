@@ -7,10 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       useFactory: async () =>
         Object.assign(
-          await getConnectionOptions(
-            process.env.NODE_ENV === 'production' ? 'prod' : 'dev',
-          ),
-        ),
+          await getConnectionOptions(),{
+            autoLoadEntities: true,
+          }),
     }),
   ],
   exports: [TypeOrmModule],
