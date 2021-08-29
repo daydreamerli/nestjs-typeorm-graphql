@@ -22,6 +22,12 @@ export class OrdersResolver {
       throw err;
     });
   }
+  @Query((returns) => [Order])
+  public async getCarOrders(@Args('carsId') carsId:string): Promise<Order[]> {
+    return await this.orderService.getCarOrders(carsId).catch((err) => {
+      throw err;
+    });
+  }
 
   @Mutation((returns) => Order)
   public async addNewOrder(

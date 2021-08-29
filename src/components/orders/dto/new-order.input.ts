@@ -33,9 +33,6 @@ export class NewOrderInput {
   // orderDate:Date
   
   @Field()
-  orderedCars: string;
- 
-
-  
+  orderedCars:string;
 
 }

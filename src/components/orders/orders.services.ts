@@ -1,17 +1,20 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InjectRepository,InjectEntityManager } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectRepository,InjectEntityManager, TypeOrmModule } from '@nestjs/typeorm';
+import { Connection, Repository ,getConnection,getConnectionManager,getRepository} from 'typeorm';
 import { NewOrderInput } from './dto/new-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
 import { Order } from './entities/order';
 import { User } from '../users/entities/user';
 import { Car } from '../cars/entities/car';
 
-@Injectable()
+@Injectable() 
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
+    // how to Inject Another Repository
+    // @InjectRepository(User)
+    // private readonly userRepository:Repository<User>
     ) {}
 
   public async getAllOrders(): Promise<Order[]> {
@@ -20,17 +23,24 @@ export class OrdersService {
       throw new InternalServerErrorException();
     });
   }
-  
 
-  public async getUserOrders(ownerId:string): Promise<Order[]> {
-   
-    return await this.orderRepository.find({relations:['owner'],where:{owner:{id:ownerId}}}).catch((err) => {
+  public async getCarOrders(id: string): Promise<Order[]>{
+    return await getConnection()
+    .createQueryBuilder()
+    .relation(Car, "orders")
+    .of(id)
+    .loadMany().catch((err) => {
+      throw new InternalServerErrorException();
+    });
+  }
+
+  public async getUserOrders(ownerId: string): Promise<Order[]> {
   
+    return await this.orderRepository.find({relations:['owner'],where:{owner:{id:ownerId}}}).catch((err) => {
       throw new InternalServerErrorException();
     });
   }
   
-
   public async deleteAllOrders(): Promise<Boolean> {
     
      await this.orderRepository.delete({}).catch((err) => {
@@ -42,15 +52,19 @@ export class OrdersService {
   public async addOrder(NewOrderData: NewOrderInput): Promise<Order> {
 
     const newOrder = this.orderRepository.create(NewOrderData);
+    // to-do: achieve manytoone and manytomany relation connection
+    // await getConnection()
+    // .createQueryBuilder()
+    //   .relation(Order, "cars")
+    //   .of(newOrder)
+    //   .add({ carId1,carId2 ...})
 
-    let userid = NewOrderData.ownerId;
-    async connection => {
-      console.log("connect to db to save the new order to user")
-      const userRepository = connection.getRepository(User)
-      const orderUser = await userRepository.findOne(userid)
-      console.log(`The order is placed by user :${orderUser.username}`)
-      newOrder.owner = orderUser
-    }
+    let userId = NewOrderData.ownerId;
+    await getConnection()
+    .createQueryBuilder()
+      .relation(Order, "owner")
+      .of(newOrder)
+      .set({userId})
     
     await this.orderRepository.save(newOrder).catch((err) => {
       new InternalServerErrorException();
