@@ -15,6 +15,7 @@ import { Connection } from 'typeorm';
       playground: true,
       debug: true,
       autoSchemaFile: true,
+      context: ({ req }) => ({ headers: req.headers }),
     }),
     ComponentsModule,
   ],
