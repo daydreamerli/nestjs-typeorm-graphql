@@ -1,17 +1,19 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { truncate } from 'fs';
-import { Repository,createConnection,Connection, Any } from 'typeorm';
+import { Repository ,getConnection} from 'typeorm';
 import { NewUserInput } from './dto/new-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user';
-import {Order} from '../orders/entities/order'
-import { Int } from '@nestjs/graphql';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class UsersService {
 
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(private jwtService: JwtService,
+    @InjectRepository(User) private userRepository: Repository<User>) { }
+  
 
   public async getAllUsers(): Promise<User[]> {
     
@@ -27,14 +29,29 @@ export class UsersService {
     });
   }
 
-  public async findByUsername(email:string) :Promise<User>{
+  public async findByUserEmail(email:string) :Promise<User>{
     
     return await this.userRepository.findOne({ email}).catch((err) => {
-      throw new InternalServerErrorException();
+      throw alert(`User with ${email} doesn't exists!Please check the email again!`);
     });
   }
 
-  public async addUser(newUserData: NewUserInput): Promise<User> {
+  public async login(email:string,password:string):Promise<any> {
+    try {
+      const user = await this.userRepository.findOne({ email });
+      return user && (await bcrypt.compare(password, user.password))
+        ? await this.jwtService.signAsync({ email, id: user.id })
+        : new GraphQLError('Sorry, wrong password/email');
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  public async createUser(newUserData: NewUserInput): Promise<User> {
+    
+    newUserData.password = await bcrypt
+      .hash(newUserData.password, 10)
+      .then((r)=>r)
 
     const newUser = this.userRepository.create(newUserData);
 
@@ -44,30 +61,61 @@ export class UsersService {
 
     return newUser;
   }
-  
+  // with isUser validate => will break the server 
+  // try {
+  //   const isUser = await this.userRepository.findOne({
+  //     email: newUserData.email,
+  //   });
+  //   if (isUser) {
+  //     throw new GraphQLError('Email already exist');
+  //   } else {
+  //     newUserData.password = await bcrypt
+  //       .hash(newUserData.password, 10) //10 = salt(10)
+  //       .then((r) => r)
+      
+  //     const newUser = this.userRepository.create(newUserData);
 
-  public async updateUserInfo(email: string, updateUserData: UpdateUserInput): Promise<User> {
-    
-    await this.userRepository.update(email,
-      {
-        username: updateUserData.username,
-        password:updateUserData.password
-      });
-    
-    const updatedUser = await this.userRepository.findOne({ email });
-
-    return updatedUser;
+  //     await this.userRepository.save(newUser).catch((err) => {
+  //       new InternalServerErrorException();
+  //     });
+  //     return newUser;
+  //   }
+  // } catch (err) {
+  //   console.error(err);
+  // }
+  public async updatePassword(id: string, password:string, newPass:string) {
+    try {
+      const user = await this.userRepository.findOne(id);
+      if (await bcrypt.compare(password, user.password)) {
+        user.password = await bcrypt.hash(newPass, 10);
+        return await this.userRepository.save(user);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  public async deleteUser(email: string){
+  public async updateUserInfo(id: string, updateUserData: UpdateUserInput): Promise<User> {
+
+    const user = await this.userRepository.findOne({ id });
     
-    await this.userRepository.delete({ email }).catch((err) => {
+    await this.userRepository.update(id,
+      {
+        username: updateUserData.username,
+        country: updateUserData.country,
+        thumbnailUrl: updateUserData.thumbnailUrl,
+      });
+    
+    return user;
+  }
+
+  public async deleteUser(id: string){
+    
+    await this.userRepository.delete({ id }).catch((err) => {
       throw new InternalServerErrorException()
     });
   
       return true;
-    
-    
   }
 
   public async deleteAllUsers(){
