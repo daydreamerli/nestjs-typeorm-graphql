@@ -1,10 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Order } from 'src/components/orders/entities/order';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'cars' })
 @ObjectType()
-export class Car {
+export class Car extends BaseEntity{
   
   @PrimaryGeneratedColumn('uuid')
   @Field()

@@ -3,17 +3,15 @@ import { Max, Min } from 'class-validator';
 
 @InputType()
 export class UpdateUserInput {
-
   
   @Field()
   username: string;
 
+  @Field({nullable:true})
+  country: string
+  
+  @Field({nullable:true})
+  thumbnailUrl: string ;
 
-  @Field((type) => String)
-  @Max(512, { message: "Too much security!" })
-  @Min(6,{message: "password too short" })
-  password: string;
-  
-  
 
 }

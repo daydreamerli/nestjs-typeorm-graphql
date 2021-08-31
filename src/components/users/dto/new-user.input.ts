@@ -24,6 +24,6 @@ export class NewUserInput {
   country: string;
 
   @Field({nullable:true})
-  thumbnailUrl: string;
+  thumbngitailUrl: string;
 
 }

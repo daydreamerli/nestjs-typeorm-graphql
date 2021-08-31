@@ -11,11 +11,7 @@ import { Car } from '../cars/entities/car';
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
-    private orderRepository: Repository<Order>,
-    // how to Inject Another Repository
-    // @InjectRepository(User)
-    // private readonly userRepository:Repository<User>
-    ) {}
+    private orderRepository: Repository<Order>) {}
 
   public async getAllOrders(): Promise<Order[]> {
     
@@ -32,6 +28,7 @@ export class OrdersService {
     .loadMany().catch((err) => {
       throw new InternalServerErrorException();
     });
+   
   }
 
   public async getUserOrders(ownerId: string): Promise<Order[]> {

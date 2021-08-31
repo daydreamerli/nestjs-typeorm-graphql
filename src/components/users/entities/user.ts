@@ -2,12 +2,12 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { IsEmail, Length, minLength } from 'class-validator';
 import { type } from 'os';
 import { Order } from 'src/components/orders/entities/order';
-import { Column, Entity, PrimaryGeneratedColumn ,OneToMany, JoinColumn} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn ,OneToMany, JoinColumn, BaseEntity} from 'typeorm';
 
 @Entity({ name: 'users' })
 @ObjectType()
 
-export class User {
+export class User  extends BaseEntity {
 
   @PrimaryGeneratedColumn('uuid')
   @Field()
@@ -17,7 +17,7 @@ export class User {
   @Field()
   username: string;
 
-  @Column({ length: 128,nullable: false })
+  @Column({ unique:true,nullable: false })
   @Field()
   @IsEmail()
   email: string;

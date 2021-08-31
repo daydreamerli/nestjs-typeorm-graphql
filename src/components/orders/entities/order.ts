@@ -1,17 +1,19 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { table } from 'console';
 import { type } from 'os';
-import { Column, Entity, PrimaryGeneratedColumn,ManyToOne,RelationId, JoinColumn, OneToMany, ManyToMany, CreateDateColumn, AfterLoad, JoinTable} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,ManyToOne,RelationId, JoinColumn, OneToMany, ManyToMany, CreateDateColumn, AfterLoad, JoinTable, BaseEntity} from 'typeorm';
 import { UsersModule } from '../../users/users.module';
 import { CarsModule } from 'src/components/cars/cars.module';
 import { User } from '../../users/entities/user';
 import {Car} from'../../cars/entities/car'
 import { IsDate} from 'class-validator';
+import { JoinAttribute } from 'typeorm/query-builder/JoinAttribute';
+
 
 @Entity({ name: 'orders' })
 @ObjectType()
 
-export class Order {
+export class Order extends BaseEntity{
 
   @PrimaryGeneratedColumn('uuid')
   @Field()
@@ -35,11 +37,11 @@ export class Order {
     }
     this.cars.push(cars)
   }
- 
+
 
   @Column()
   @Field()
-  orderedCars: string;
+  orderedCars: string
   
   @Column()
   @Field()
