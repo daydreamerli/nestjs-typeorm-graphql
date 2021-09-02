@@ -50,7 +50,7 @@ export class OrdersService {
   public async addOrder(NewOrderData: NewOrderInput, carsId: string): Promise<Order> {
     
     const userId = NewOrderData.ownerId; 
-    let caridArray = carsId.split(",")
+    const carsIdArray = carsId.split(",")
     const newOrder = this.orderRepository.create(NewOrderData);
     await this.orderRepository.save(newOrder);
     // to-do: achieve manytoone and manytomany relation connection
@@ -58,7 +58,7 @@ export class OrdersService {
       .createQueryBuilder()
       .relation(Order, "cars")
       .of(newOrder)
-      .add(caridArray);
+      .add(carsIdArray);
   
     await getConnection()
       .createQueryBuilder()
