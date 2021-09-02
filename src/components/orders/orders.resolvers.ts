@@ -31,9 +31,9 @@ export class OrdersResolver {
 
   @Mutation((returns) => Order)
   public async addNewOrder(
-    @Args('newOrderData') newOrderData: NewOrderInput,
+    @Args('newOrderData') newOrderData: NewOrderInput,@Args('carsId') carsId:string
   ): Promise<Order> {
-    return await this.orderService.addOrder(newOrderData).catch((err) => {
+    return await this.orderService.addOrder(newOrderData,carsId).catch((err) => {
       throw err;
     });
   }

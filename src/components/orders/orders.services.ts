@@ -7,6 +7,7 @@ import { Order } from './entities/order';
 import { User } from '../users/entities/user';
 import { Car } from '../cars/entities/car';
 
+
 @Injectable() 
 export class OrdersService {
   constructor(
@@ -46,26 +47,25 @@ export class OrdersService {
      return true;
   }
 
-  public async addOrder(NewOrderData: NewOrderInput): Promise<Order> {
-
+  public async addOrder(NewOrderData: NewOrderInput, carsId: string): Promise<Order> {
+    
+    const userId = NewOrderData.ownerId; 
+    let caridArray = carsId.split(",")
     const newOrder = this.orderRepository.create(NewOrderData);
+    await this.orderRepository.save(newOrder);
     // to-do: achieve manytoone and manytomany relation connection
-    // await getConnection()
-    // .createQueryBuilder()
-    //   .relation(Order, "cars")
-    //   .of(newOrder)
-    //   .add({ carId1,carId2 ...})
-
-    let userId = NewOrderData.ownerId;
     await getConnection()
-    .createQueryBuilder()
+      .createQueryBuilder()
+      .relation(Order, "cars")
+      .of(newOrder)
+      .add(caridArray);
+  
+    await getConnection()
+      .createQueryBuilder()
       .relation(Order, "owner")
       .of(newOrder)
-      .set({userId})
-    
-    await this.orderRepository.save(newOrder).catch((err) => {
-      new InternalServerErrorException();
-    });
+      .set(userId);
+  
     return newOrder;
   }
 
